@@ -1,6 +1,4 @@
-/tools/logs/*
 /tools/.local
-/tools/results/*
 /tools/.bash_history
 .Xauthority
 tools/.Xauthority
