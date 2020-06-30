@@ -1,0 +1,78 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  6.0                                   |
+|   \\  /    A nd           | Website:  https://openfoam.org                  |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    inlet
+    {
+        type           fixedValue;
+        value          uniform ( 1 0 0 );
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    walls
+    {
+        type            fixedValue;
+        value           uniform ( 0 0 0 ); 
+    }
+    
+    cylinder
+    {
+        type        codedFixedValue;
+        value       uniform (0 0 0);
+        name 		velocityAroundCylinder;
+
+        code
+        #{
+            const fvPatch& boundaryPatch = patch(); //generic
+            const vectorField& Cf = boundaryPatch.Cf(); //generic
+            vectorField& field = *this; //generic
+
+            const scalar xc  		= 	0.0; // center x coordinate
+	        const scalar yc  		= 	0.0; // center y coordinate
+	        const scalar omega = -0.169911689622;
+	        const scalar Vx = 0.835911698542;
+
+
+            forAll(Cf, faceI) // loop over all the patch faces
+            {
+                const scalar x = Cf[faceI].x(); // x coordinate of the faces i
+                const scalar y = Cf[faceI].y(); // y coordinate of the faces i
+                //const scalar z = Cf[faceI].z(); // z coordinate of the faces i
+                const scalar radius = pow((y-yc)*(y-yc)+(x-xc)*(x-xc),0.5); // compute radius from center patch
+
+		        field[faceI] = vector(-radius*omega*((y-yc)/radius),radius*omega*((x-xc)/radius), 0) + vector(Vx,0,0); // define velocity value on the face i
+             }
+
+        #};
+    }
+
+    frontAndBack
+    {
+        type           empty;
+    }
+    
+}
+
+// ************************************************************************* //
