@@ -44,12 +44,20 @@ def changeCylinderPosition(x,y):
     
     xcNewText= '          const scalar xc = '+str(x)+';'
     ycNewText= '          const scalar yc = '+str(y)+';'
-
+    
+    # For torque calculation
     cmdXc = 'sed -i "/'+xcOldText+'/c\\'+xcNewText+'" '+curDir+'../system/controlDict'
     cmdYc = 'sed -i "/'+ycOldText+'/c\\'+ycNewText+'" '+curDir+'../system/controlDict'
 
     subprocess.call([cmdXc], shell=True, executable='/bin/bash', cwd=curDir)
     subprocess.call([cmdYc], shell=True, executable='/bin/bash', cwd=curDir)
+
+    # for BC in U file
+    cmdXc2 = 'sed -i "/'+xcOldText+'/c\\'+xcNewText+'" '+curDir+'../0/U'
+    cmdYc2 = 'sed -i "/'+ycOldText+'/c\\'+ycNewText+'" '+curDir+'../0/U'
+
+    subprocess.call([cmdXc2], shell=True, executable='/bin/bash', cwd=curDir)
+    subprocess.call([cmdYc2], shell=True, executable='/bin/bash', cwd=curDir)
 
     # Modifying in geo file
     cmdCx = 'sed -i "/cx=/c\\cx='+str(x)+';" '+curDir+'mesh.geo'
