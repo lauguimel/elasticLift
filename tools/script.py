@@ -201,7 +201,7 @@ def main():
         subprocess.call(cmd, shell=True, executable='/bin/bash', cwd=resultsDir)
 
         # Saving the last timestep folder + constant + system + 0 
-        destFolder = resultsDir+cx+cy+'/'
+        destFolder = resultsDir+cx+'_'+cy+'/'
         print('Saving simulation folders to ' + destFolder)
         savingCalculationFolders(destFolder)
 
