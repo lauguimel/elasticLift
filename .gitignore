@@ -1,7 +1,8 @@
-/tools/.local
-/tools/.bash_history
-.Xauthority
-tools/.Xauthority
 !.gitignore
-/dynamicCode
-/constant/polyMesh
+/dynamicCode/
+constant/polyMesh/
+0/U
+tools/mesh.geo
+tools/mesh.msh
+
+tools/results/

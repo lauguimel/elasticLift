@@ -74,18 +74,27 @@ def deleteMesh():
 def deleteCalc():
     # Deleting folders
     folders=(next(os.walk(calcPath))[1])
-    foldersToKeep=["constant", "system","tools", "0" ]
+    foldersToKeep=["constant", "system","tools", "0", ".git" ]
     for f in folders:
         if f not in foldersToKeep:
             path=calcPath+f
             shutil.rmtree(path, ignore_errors=True)
     # Deleting files
     files=(next(os.walk(calcPath))[2])
-    filesTokeep=["writeData",".Xauthority"]
+    filesTokeep=["writeData",".Xauthority",".gitignore"]
     for f in files:
         if f not in filesTokeep:
             path=calcPath+f
             os.remove(path)
+
+# Saving last calculation step once successfully finished
+def savingCalculationFolders(folderName):
+    # getting folders
+    folders=(next(os.walk(calcPath))[1])
+    # removing tools folder
+    folders.remove('tools')
+    for f in folders:
+        shutil.copytree(f, folderName+f)
 
 # Removing all the results (if any)
 def deleteResults():
@@ -190,5 +199,11 @@ def main():
     
         cmd="echo "+str(sol.success)+','+sol.message+','+str(forces[0])+','+str(forces[1])+','+str(forces[4])+','+str(sol.x[0])+','+str(sol.x[1])+" >> batch.csv"
         subprocess.call(cmd, shell=True, executable='/bin/bash', cwd=resultsDir)
+
+        # Saving the last timestep folder + constant + system + 0 
+        destFolder = resultsDir+cx+cy+'/'
+        print('Saving simulation folders to ' + destFolder)
+        savingCalculationFolders(destFolder)
+
 
 main()

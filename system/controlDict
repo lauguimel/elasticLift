@@ -28,9 +28,9 @@ deltaT          1e-2;
 
 writeControl    runTime;
 
-writeInterval   2;
+writeInterval   1;
 
-purgeWrite      0;
+purgeWrite      1;
 
 writeFormat     ascii;
 
@@ -89,7 +89,7 @@ functions
            vector Fpatch = gSum( ( -mesh().boundaryMesh()[cyl].faceAreas() ) & F.boundaryField()[cyl] )/(etaS_ + etaP_).value();
           
           const scalar xc = 20;
-          const scalar yc = 2.1;
+          const scalar yc = 2.2;
           const scalar zc = 0.5;
 	        vector Tpatch = gSum( ( mesh().Cf().boundaryField()[cyl]-vector(xc,yc,zc))^(( -mesh().boundaryMesh()[cyl].faceAreas() ) & F.boundaryField()[cyl] ));
   
