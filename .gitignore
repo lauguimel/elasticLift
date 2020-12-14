@@ -4,5 +4,3 @@ constant/polyMesh/
 0/U
 tools/mesh.geo
 tools/mesh.msh
-
-tools/results/
