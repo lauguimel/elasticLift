@@ -49,10 +49,10 @@ boundaryField
             const vectorField& Cf = boundaryPatch.Cf(); //generic
             vectorField& field = *this; //generic
 
-            const scalar xc  		= 	0.0; // center x coordinate
-	        const scalar yc  		= 	0.0; // center y coordinate
-	        const scalar omega = -0.169911689622;
-	        const scalar Vx = 0.835911698542;
+          const scalar xc = 20;
+          const scalar yc = 2;
+	        const scalar omega = 0.0;
+	        const scalar Vx = 0.0;
 
 
             forAll(Cf, faceI) // loop over all the patch faces

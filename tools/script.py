@@ -96,11 +96,16 @@ def savingCalculationFolders(folderName):
     for f in folders:
         shutil.copytree(f, folderName+f)
 
+# Saving the forces.txt file after every convergence
+def savingForcesFile(fileName):
+    shutil.copyfile(calcPath+'forces.txt', resultsDir+fileName)
+
 # Removing all the results (if any)
 def deleteResults():
     for root, dirs, files in os.walk(resultsDir):
         for f in files:
-            os.unlink(os.path.join(root, f))
+            if f != '.gitignore':
+                os.unlink(os.path.join(root, f))
 
 # 
 def allClean():
@@ -139,7 +144,7 @@ def getForces():
     return(values[1:]) 
 
 # Running calcultation
-# Arguments: BC: Array of floats 
+# Arguments: BC: Array of floats  [Vx,Omega]
 # returns Cd and Tz
 def runCalculation(BC):
     global iteration
@@ -156,9 +161,12 @@ def runCalculation(BC):
     print("--> Cd = "+str(forces[0])+", "+"Cl = "+str(forces[1])+", "+"Tz = "+str(forces[4]))
     
     # Saving values to log file
-    
     cmd="echo "+str(forces[0])+','+str(forces[1])+','+str(forces[4])+','+str(BC[0])+','+str(BC[1])+" >> "+str(cx)+"_"+str(cy)+'.csv'
     subprocess.call(cmd, shell=True, executable='/bin/bash', cwd=resultsDir)
+
+    # Saving forces.txt file
+    newforcesFileName='forces_'+str(cx)+'_'+str(cy)+'_'+str(iteration)+'.txt'
+    savingForcesFile(newforcesFileName)
 
     return([forces[0],forces[4]])    
 
@@ -172,6 +180,8 @@ def main():
 
     positions = readCSV(curDir+'positions.csv')
     subprocess.call('> batch.csv', shell=True, executable='/bin/bash', cwd=resultsDir)
+    cmd="echo success,message,Cd,Cl,Tz,Vx,Omega >> batch.csv"
+    subprocess.call(cmd, shell=True, executable='/bin/bash', cwd=resultsDir)
 
     # Looping over all calculations
     for idx, row in enumerate(positions):

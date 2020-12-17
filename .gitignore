@@ -4,3 +4,9 @@ constant/polyMesh/
 0/U
 tools/mesh.geo
 tools/mesh.msh
+.Xauthority
+forces.txt
+!/system/
+!/tools/
+!/constant/
+/*
