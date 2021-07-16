@@ -49,8 +49,8 @@ boundaryField
             const vectorField& Cf = boundaryPatch.Cf(); //generic
             vectorField& field = *this; //generic
 
-          const scalar xc = 20;
-          const scalar yc = 2;
+            const scalar xc = 20;
+            const scalar yc = 2;
 	        const scalar omega = 0.0;
 	        const scalar Vx = 0.0;
 
@@ -61,8 +61,9 @@ boundaryField
                 const scalar y = Cf[faceI].y(); // y coordinate of the faces i
                 //const scalar z = Cf[faceI].z(); // z coordinate of the faces i
                 const scalar radius = pow((y-yc)*(y-yc)+(x-xc)*(x-xc),0.5); // compute radius from center patch
+                const scalar angle = atan2((y-yc), (x-xc));
 
-		        field[faceI] = vector(-radius*omega*((y-yc)/radius),radius*omega*((x-xc)/radius), 0) + vector(Vx,0,0); // define velocity value on the face i
+		        field[faceI] = vector(-radius*omega*sin(angle),radius*omega*cos(angle), 0) + vector(Vx,0,0); // define velocity value on the face i
              }
 
         #};

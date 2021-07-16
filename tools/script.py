@@ -42,8 +42,8 @@ def changeCylinderPosition(x,y):
     xcOldText= 'const scalar xc'
     ycOldText= 'const scalar yc'
     
-    xcNewText= '          const scalar xc = '+str(x)+';'
-    ycNewText= '          const scalar yc = '+str(y)+';'
+    xcNewText= '            const scalar xc = '+str(x)+';'
+    ycNewText= '            const scalar yc = '+str(y)+';'
     
     # For torque calculation
     cmdXc = 'sed -i "/'+xcOldText+'/c\\'+xcNewText+'" '+curDir+'../system/controlDict'
@@ -94,7 +94,11 @@ def savingCalculationFolders(folderName):
     # removing tools folder
     folders.remove('tools')
     for f in folders:
-        shutil.copytree(f, folderName+f)
+        if os.path.exists(folderName+f) and os.path.isdir(folderName+f):
+            shutil.rmtree(folderName+f)
+        else:
+            shutil.copytree(f, folderName+f)
+
 
 # Saving the forces.txt file after every convergence
 def savingForcesFile(fileName):

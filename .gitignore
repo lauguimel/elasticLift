@@ -4,9 +4,10 @@ constant/polyMesh/
 0/U
 tools/mesh.geo
 tools/mesh.msh
+tools/**
 .Xauthority
 forces.txt
 !/system/
-!/tools/
 !/constant/
-/*
+!tools/debugVelocity.png
+!tools/debugVelocity.py

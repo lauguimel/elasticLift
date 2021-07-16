@@ -66,8 +66,7 @@ functions
 	 codeWrite
 	 #{
  
-          // Lookup/create variable 
-	     
+        // Lookup/create variable 
 	      const volVectorField& U = mesh().lookupObject<volVectorField>("U");
         const volSymmTensorField& tau = mesh().lookupObject<volSymmTensorField>("tau");
         const volScalarField& p = mesh().lookupObject<volScalarField>("p");
@@ -77,47 +76,47 @@ functions
         dimensionedScalar etaP_(constDict.subDict("parameters").lookup("etaP"));
 
 
-          label cyl = mesh().boundaryMesh().findPatchID("cylinder");
-          scalarList list;
-    
-          // Compute cd
- 
-           volTensorField L = fvc::grad(U);
-
-	        volSymmTensorField F = tau + symm( L + L.T() ) * etaS_ - p * symmTensor::I * rho_;
-
-           vector Fpatch = gSum( ( -mesh().boundaryMesh()[cyl].faceAreas() ) & F.boundaryField()[cyl] )/(etaS_ + etaP_).value();
-          
-          const scalar xc = 20;
-          const scalar yc = 2;
-          const scalar zc = 0.5;
-	        vector Tpatch = gSum( ( mesh().Cf().boundaryField()[cyl]-vector(xc,yc,zc))^(( -mesh().boundaryMesh()[cyl].faceAreas() ) & F.boundaryField()[cyl] ));
+        label cyl = mesh().boundaryMesh().findPatchID("cylinder");
+        scalarList list;
   
-           list.append(mesh().time().value());  // Time (col 0)  
-           list.append(Fpatch.x());             // Cd   (col 1)  
-           list.append(Fpatch.y());             // Cl   (col 2)  
-           list.append(Tpatch.x());             // Tx   (col 3)  
-           list.append(Tpatch.y());             // Ty   (col 4)  
-           list.append(Tpatch.z());             // Tz   (col 5)  		
+        // Compute cd
+
+        volTensorField L = fvc::grad(U);
+
+        volSymmTensorField F = tau + symm( L + L.T() ) * etaS_ - p * symmTensor::I * rho_;
+
+        vector Fpatch = gSum( ( -mesh().boundaryMesh()[cyl].faceAreas() ) & F.boundaryField()[cyl] )/(etaS_ + etaP_).value();
+        
+        const scalar xc = 20;
+        const scalar yc = 2;
+        const scalar zc = 0.5;
+        vector Tpatch = gSum( ( mesh().Cf().boundaryField()[cyl]-vector(xc,yc,zc))^(( -mesh().boundaryMesh()[cyl].faceAreas() ) & F.boundaryField()[cyl] ));
+
+        list.append(mesh().time().value());  // Time (col 0)  
+        list.append(Fpatch.x());             // Cd   (col 1)  
+        list.append(Fpatch.y());             // Cl   (col 2)  
+        list.append(Tpatch.x());             // Tx   (col 3)  
+        list.append(Tpatch.y());             // Ty   (col 4)  
+        list.append(Tpatch.z());             // Tz   (col 5)  		
 
           // Write data
 
-           string comsh;           
-           string filename("forces.txt");
-	   std::stringstream doub2str; doub2str.precision(12);
+        string comsh;           
+        string filename("forces.txt");
+        std::stringstream doub2str; doub2str.precision(12);
 
-           comsh = "./writeData " + filename;
-           forAll(list, id)
-            {
-              doub2str.str(std::string());
-              doub2str << list[id]; 
-              comsh += " " + doub2str.str();
-            }
-           
-           if (Pstream::master())
-            {
-	            system(comsh);
-            }
+        comsh = "./writeData " + filename;
+        forAll(list, id)
+        {
+          doub2str.str(std::string());
+          doub2str << list[id]; 
+          comsh += " " + doub2str.str();
+        }
+        
+        if (Pstream::master())
+        {
+          system(comsh);
+        }
 
 	 #};
     }
