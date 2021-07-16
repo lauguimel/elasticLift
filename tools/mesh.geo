@@ -2,7 +2,7 @@
 SetFactory("OpenCASCADE");
 
 Nhup=65; Rhup=0.95;
-Nvup=50; Rvup=1.00;
+Nvup=65; Rvup=1.00;
 Nhdown=Nhup; Rhdown=Rhup;
 Nvdown=Nvup; Rvdown=Rvup;
 Nhleft=Nvup; Rhleft=1.00;
